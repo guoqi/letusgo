@@ -4,7 +4,7 @@ from PIL import Image
 import md5
 import os
 
-from globals import DEFAULT_AVATAR_DIR, AVATAR_BIG_SIZE, AVATAR_SMALL_SIZE, DEFAULT_AVATAR_CACHE_DIR
+from globals import AVATAR_DIR, AVATAR_BIG_SIZE, AVATAR_SMALL_SIZE, DEFAULT_AVATAR_CACHE_DIR
 from errors import InternalError
 
 def hash(string):
@@ -19,7 +19,7 @@ def thumbnails(image_dir, filename='default'):
     Return a tuble include origin picture\'s path, 64*64 thumbnail\'s path and 32*32 thumbnail\'s path.
     '''
     inputfile = genpath(DEFAULT_AVATAR_CACHE_DIR, filename+'.png')
-    outputdir= genpath(DEFAULT_AVATAR_DIR, image_dir)
+    outputdir= genpath(AVATAR_DIR, image_dir)
     if not os.path.isfile(inputfile):
         raise InternalError('File not found', 'File {path} does\'t exist'.format(path=inputfile))
     if not os.path.isdir(outputdir):

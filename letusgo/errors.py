@@ -4,7 +4,7 @@
 class InternalError(Exception):
     '''
     Internal server error.
-    This type of errors must be handled and return it's value.
+    This type of errors must be logged and return it's value.
     '''
     def __init__(self, err, message):
         self.err = err

@@ -2,7 +2,7 @@
 #coding: utf-8
 class BaseConfig(object):
     '''Base config'''
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:a767813944@localhost/ideashare'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:a767813944@localhost/letusgo'
 
 
 class DevelopmentConfig(BaseConfig):
