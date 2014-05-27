@@ -25,7 +25,7 @@ class User(db.Model):
     loc = db.Column(db.String(255), nullable=False)
     reg_time = db.Column(db.DateTime, nullable=False, default=datetime.now())
     last_login_t = db.Column(db.DateTime, nullable=False, default=datetime.now(), onupdate=datetime.now())
-    token = db.Column(db.String(255), nullable=False)
+    token = db.Column(db.String(16), nullable=False)
 
     h_activities = db.relationship('Activity', backref=db.backref('host', lazy='select'), lazy='select')
     p_activities = db.relationship('Activity', backref=db.backref('joins', lazy='select'), lazy='select', secondary=Participant)
@@ -45,4 +45,17 @@ class User(db.Model):
             raise ThrownError('Avatar type error')
         return open(pic[type], 'rb')
 
+    def dump(self):
+        sex = ['female', 'male']
+        return {
+                'uid': self.uid, 
+                'tel': self.tel, 
+                'name': self.name,
+                'big_avatar': self.big_avatar, 
+                'small_avatar': self.small_avatar, 
+                'sex': sex[self.sex], 
+                'age': self.age, 
+                'loc': self.loc, 
+                'token': self.token
+                }
 
