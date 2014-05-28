@@ -19,3 +19,5 @@ APP_NAME = 'Let\'s Go!'
 COMPANY_NAME = 'Go!'
 
 TIME_OUT = 30
+
+SMS_TPL_REG = 6

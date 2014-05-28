@@ -2,3 +2,4 @@
 letusgo/test.py
 letusgo/config.py
 letusgo.sql
+letusgo/*.pyc

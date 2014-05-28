@@ -13,7 +13,7 @@ import time
 from datetime import datetime
 
 from globals import AVATAR_DIR, AVATAR_BIG_SIZE, AVATAR_SMALL_SIZE, DEFAULT_AVATAR_CACHE_DIR, \
-        APP_NAME, COMPANY_NAME, TIME_OUT
+        APP_NAME, COMPANY_NAME, TIME_OUT, SMS_TPL_REG
 from errors import InternalError, ThrownError
 
 def hash(string):
@@ -30,6 +30,16 @@ def gentoken():
     random.shuffle(seq)
     return ''.join(seq)
 
+def gencaptcha():
+    '''
+    Genrate a captcha.
+    '''
+    seq = []
+    for i in range(6):
+        seq.append(random.choice(string.digits))
+    random.shuffle(seq)
+    return ''.join(seq)
+
 def genpath(*args):
     return os.sep.join(args)
 
@@ -42,13 +52,13 @@ def filter(d, t):
             raise ThrownError('Wrong Parameters')
     return True
 
-def istimeout(dd):
+def istimeout(dd, timeout=TIME_OUT):
     '''
     Return whether the request is timeout or not.
     '''
     diff  = int(time.mktime(datetime.now().timetuple())) - int(dd)
     print diff
-    if diff < 0 or diff > TIME_OUT:
+    if diff < 0 or diff > timeout:
         raise ThrownError('Time out')
     return True
 
@@ -106,7 +116,10 @@ class SMSSender(object):
         self.app = app
         self.api_key = app.config['API_KEY']
 
-    def tpl_send(self, mobile, code, tpl_id):
+    def tpl_send(self, mobile, code, tpl_id=SMS_TPL_REG):
+        '''
+        Send captcha message default.
+        '''
         def wrapper():
             url = 'http://yunpian.com/v1/sms/tpl_send.json' 
             value = {
@@ -128,6 +141,26 @@ class SMSSender(object):
             else:
                 raise InternalError('Send SMS Error', d['msg'])
         thread.start_new_thread(wrapper, ())
+
+def require_login(func):
+    from flask import g, request
+    from functools import wraps
+    @wraps(func)
+    def wrapper():
+        from models import User
+        from errors import ThrownError
+        args = request.form
+        filter(args, ('uid', 'auth', 'dd'))
+        istimeout(args['dd'])
+        u = User.query.filter(User.uid == args['uid']).first()
+        if u is None:
+            raise ThrownError('User do not exists.')
+        if hash(':'.join([u.token, args['dd']])) != args['auth']:
+            raise ThrownError('Wrong token.')
+        g.user = u 
+        g.args = args
+        return func()
+    return wrapper
 
 if __name__ == '__main__':
     # convert2png('/var/www/letusgo/letusgo/avatar/cache/default.jpg')
