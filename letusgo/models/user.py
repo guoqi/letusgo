@@ -4,6 +4,7 @@ from datetime import datetime
 
 from _base import db
 from participant import Participant
+from voteup import Voteup
 from ..errors import ThrownError
 from ..globals import DEFAULT_AVATAR_BIG, DEFAULT_AVATAR_SMALL, DEFAULT_AVATAR_ORIGIN
 
@@ -29,8 +30,10 @@ class User(db.Model):
 
     h_activities = db.relationship('Activity', backref=db.backref('host', lazy='select'), lazy='select')
     p_activities = db.relationship('Activity', backref=db.backref('joins', lazy='select'), lazy='select', secondary=Participant)
+    v_activities = db.relationship('Activity', backref=db.backref('voters', lazy='select'), lazy='select', secondary=Voteup)
 
     reviews = db.relationship('Review', backref=db.backref('reviewer', lazy='select'), lazy='select')
+
 
     def __init__(self, tel, pwd, token):
         self.tel = tel

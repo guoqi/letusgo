@@ -13,3 +13,12 @@ class Review(db.Model):
     uid = db.Column(db.Integer, db.ForeignKey('user.uid'), nullable=False)
     review_t = db.Column(db.DateTime, nullable=False, default=datetime.now())
      
+    def dump(self):
+        '''
+        Dump the object.
+        '''
+        return {
+                'rid': self.rid, 
+                'content': self.content, 
+                'reviewer': self.reivewer.dump()
+                }

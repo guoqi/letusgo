@@ -19,6 +19,12 @@ from errors import InternalError, ThrownError
 def hash(string):
     return md5.md5(string).hexdigest()
 
+def gettimestamp(dd):
+    if isinstance(dd, datetime):
+        return time.mktime(dd.timetuple())
+    else:
+        raise InternalError('Type Error', 'Only datetime object can convert to timestamp')
+
 def gentoken():
     '''
     Genrate a token.
@@ -56,7 +62,7 @@ def istimeout(dd, timeout=TIME_OUT):
     '''
     Return whether the request is timeout or not.
     '''
-    diff  = int(time.mktime(datetime.now().timetuple())) - int(dd)
+    diff  = int(gettimestamp(datetime.now())) - int(dd)
     print diff
     if diff < 0 or diff > timeout:
         raise ThrownError('Time out')
