@@ -1,5 +1,5 @@
 *.pyc
+letusgo.sql
 letusgo/test.py
 letusgo/config.py
-letusgo.sql
-letusgo/*.pyc
+letusgo/avatar
