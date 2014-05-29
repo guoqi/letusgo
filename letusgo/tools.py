@@ -62,6 +62,7 @@ def istimeout(dd, timeout=TIME_OUT):
     '''
     Return whether the request is timeout or not.
     '''
+    print dd, gettimestamp(datetime.now())
     diff  = int(gettimestamp(datetime.now())) - int(dd)
     print diff
     if diff < 0 or diff > timeout:

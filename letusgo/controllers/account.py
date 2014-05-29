@@ -20,7 +20,7 @@ def login():
     if user is None:
         raise ThrownError('Wrong telephone number')
     istimeout(args['dd'])
-    print user.tel, user.pwd, args['dd']
+    # print user.tel, user.pwd, args['dd']
     if hash(':'.join([user.tel, user.pwd, args['dd']])) != args['info']:
         raise ThrownError('Wrong password')
     # login success, genrate token and return
