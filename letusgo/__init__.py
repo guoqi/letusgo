@@ -50,7 +50,7 @@ def init_errorhandlers(app):
                 'status': False, 
                 'message': e.err, 
                 'result': ''
-                }
+            }
         return json.dumps(r)
     
 app = init_app()

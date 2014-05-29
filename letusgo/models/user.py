@@ -54,16 +54,14 @@ class User(db.Model):
         return open(pic[type], 'rb')
 
     def dump(self):
-        sex = ['female', 'male']
         return {
                 'uid': self.uid, 
                 'tel': self.tel, 
                 'name': self.name,
                 'big_avatar': self.big_avatar, 
                 'small_avatar': self.small_avatar, 
-                'sex': sex[self.sex], 
+                'sex': self.sex, 
                 'age': self.age, 
-                'loc': self.loc, 
-                'token': self.token
+                'loc': self.loc
                 }
 

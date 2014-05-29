@@ -31,16 +31,15 @@ class Activity(db.Model):
 
     reviews = db.relationship('Review', backref=db.backref('activity', lazy='select'), lazy='dynamic')
 
-    def __init__(self, name, uid, start_t, end_t, limits, longitude, latitude, info='', image=''):
+    def __init__(self, name, uid, start_t, end_t, limits, longitude, latitude, intro='', image=''):
         self.name = name
-        self.uid = uid
-        self.info = info
-        self.start_t = start_t
-        self.end_t = end_t
-        self.limits = limits
-        self.longitude = longitude
-        self.latitude = latitude
-        self.info = info
+        self.uid = int(uid)
+        self.start_t = datetime.fromtimestamp(int(start_t))
+        self.end_t = datetime.fromtimestamp(int(end_t))
+        self.limits = int(limits)
+        self.longitude = float(longitude)
+        self.latitude = float(latitude)
+        self.intro = intro
         self.image = image
 
     def render_image(self):

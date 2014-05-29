@@ -18,17 +18,17 @@ def list():
             'status': True, 
             'message': 'OK', 
             'result': {
-                'Review': []
+                'Comment': []
                 }
         }
     for rev in reviews:
-        r['result']['Review'].append(rev.dump())
+        r['result']['Comment'].append(rev.dump())
     return json.dumps(r)
 
 @bp.route('/release', methods=['POST'])
 @require_login
 def release():
-    args = request.form
+    args = g.args
     filter(args, ('aid', 'content'))
     r = Review(content=args['content'], aid=args['aid'], uid=g.user.uid)
     db.session.add(r) 

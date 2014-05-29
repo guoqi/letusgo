@@ -33,9 +33,10 @@ def login():
             'status': True, 
             'message': 'OK', 
             'result': {
-                'User': user.dump()
+                'Actor': user.dump()
                 }
         }
+    r['result']['Actor']['token'] = user.token
     return json.dumps(r)
 
 @bp.route('/reg', methods=['POST'])
@@ -132,11 +133,14 @@ def info():
             'status': True, 
             'message': 'OK', 
             'result': {
-                    'User': u.dump()
+                    'Actor': u.dump()
                 }
         }
-    del r['result']['User']['token']
-    r['result']['User']['h_activities'] = u.h_activities
-    r['result']['User']['p_activities'] = u.p_activities
+    r['result']['Actor']['h_activities'] = []
+    r['result']['Actor']['p_activities'] = []
+    for a in u.h_activities:
+        r['result']['Actor']['h_activities'].append(a.dump())
+    for a in u.p_activities:
+        r['result']['Actor']['p_activities'].append(a.dump())
     return json.dumps(r)
 

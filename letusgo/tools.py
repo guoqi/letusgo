@@ -159,7 +159,7 @@ def require_login(func):
         args = request.form
         filter(args, ('uid', 'auth', 'dd'))
         istimeout(args['dd'])
-        u = User.query.filter(User.uid == args['uid']).first()
+        u = User.query.filter(User.uid == int(args['uid'])).first()
         if u is None:
             raise ThrownError('User do not exists.')
         if hash(':'.join([u.token, args['dd']])) != args['auth']:

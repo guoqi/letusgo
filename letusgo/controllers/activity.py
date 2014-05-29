@@ -13,7 +13,7 @@ bp = Blueprint('activity', __name__)
 @bp.route('/release', methods=['POST'])
 @require_login
 def release():
-    args = request.form
+    args = g.args
     filter(args, ('name', 'start_t', 'end_t', 'limits', 'longitude', 'latitude'))
     info = args.get('intro', '', type=str)
     image = args.set('image', '', type=str)
@@ -36,7 +36,7 @@ def upload():
 @bp.route('/profile', methods=['POST'])
 @require_login
 def profile():
-    args = request.form
+    args = g.args
     filter(args, ('aid', 'start_t', 'end_t', 'limits', 'longitude', 'latitude'))
     info = args.get('intro', '', type=str)
     image = args.get('image', '', type=str)
@@ -61,7 +61,7 @@ def profile():
 @bp.route('/delete', methods=['POST'])
 @require_login
 def delete():
-    args = request.form
+    args = g.args
     filter(args, ('aid', ))
     a = Activity.query.filter(Activity.aid == args['aid']).first()
     if a is None:
@@ -86,14 +86,14 @@ def near():
             'status': True, 
             'message': 'OK', 
             'result': {
-                'Activity': []
+                'ActiEvent': []
                 }
         }
     for a in activities:
         d = a.distances(args['l'], args['b'])
         if d <= 1:
-            r['result']['Activity'].append(a.dump())
-            r['result']['Activity']['distances'] = d
+            r['result']['ActiEvent'].append(a.dump())
+            r['result']['ActiEvent']['distances'] = d
     return json.dumps(r)
 
 @bp.route('/list', methods=['GET'])
@@ -105,13 +105,13 @@ def list():
             'status': True, 
             'message': 'OK', 
             'result': {
-                'Activity':[]
+                'ActiEvent':[]
                 }
         }
     for a in activities:
         d = a.distances(args['l'], args['b'])
-        r['result']['Activity'].append(a.dump())
-        r['result']['Activity']['distances'] = d
+        r['result']['ActiEvent'].append(a.dump())
+        r['result']['ActiEvent']['distances'] = d
     return json.dumps(r)
 
 @bp.route('/search', methods=['GET'])
@@ -124,13 +124,13 @@ def search():
             'status': True, 
             'message': 'OK', 
             'result': {
-                'Activity':[]
+                'ActiEvent':[]
                 }
         }
     for a in activities:
         d = a.distances(args['l'], args['b'])
-        r['result']['Activity'].append(a.dump())
-        r['result']['Activity']['distances'] = d
+        r['result']['ActiEvent'].append(a.dump())
+        r['result']['ActiEvent']['distances'] = d
     return json.dumps(r)
 
 @bp.route('/participants', methods=['GET'])
@@ -144,17 +144,17 @@ def participants():
             'status': True, 
             'message': 'OK', 
             'result': {
-                'User': []
+                'Actor': []
                 }
         }
     for u in a.joins:
-        r['result']['User'].append(u.dump())
+        r['result']['Actor'].append(u.dump())
     return json.dumps(r)
 
 @bp.route('/join', methods=['POST'])
 @require_login
 def join():
-    args = request.args
+    args = g.args
     filter(args, ('aid', ))
     a = Activity.query.filter(Activity.aid == args['aid']).first()
     if a is None:
@@ -175,7 +175,7 @@ def join():
 @bp.route('/voteup', methods=['POST'])
 @require_login
 def voteup():
-    args = request.args
+    args = g.args
     filter(args, ('aid', ))
     a = Activity.query.filter(Activity.aid == args['aid']).first()
     if a is None:
