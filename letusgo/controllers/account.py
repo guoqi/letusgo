@@ -19,7 +19,7 @@ def login():
     user = User.query.filter(User.tel==args.get('tel')).first()
     if user is None:
         raise ThrownError('Wrong telephone number')
-    istimeout(args['dd'])
+    istimeout(args.get('dd', type=int))
     # print user.tel, user.pwd, args['dd']
     if hash(':'.join([user.tel, user.pwd, str(args.get('dd', type=int))])) != args['info']:
         raise ThrownError('Wrong password')
