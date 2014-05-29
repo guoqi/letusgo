@@ -21,7 +21,7 @@ def login():
         raise ThrownError('Wrong telephone number')
     istimeout(args['dd'])
     # print user.tel, user.pwd, args['dd']
-    if hash(':'.join([user.tel, user.pwd, args['dd']])) != args['info']:
+    if hash(':'.join([user.tel, user.pwd, int(args['dd'])])) != args['info']:
         raise ThrownError('Wrong password')
     # login success, genrate token and return
     user.token = gentoken()
