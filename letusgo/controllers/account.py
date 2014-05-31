@@ -44,6 +44,9 @@ def reg():
     args = request.form
     filter(args, ('tel', 'pwd'))
     pwd = base64.decodestring(args['pwd'])
+    u = User.query.filter(User.tel == args['tel']).first()
+    if u is not None:
+        raise ThrownError('Phone has been used.')
     d = shelve.open('temp')
     d['tel'] = args['tel']
     d['pwd'] = hash(pwd)
@@ -79,7 +82,7 @@ def verify():
     d.clear()
     d.close()
     r = {
-            'result': True, 
+            'status': True, 
             'message': 'OK', 
             'result': {
                     'uid': u.uid, 

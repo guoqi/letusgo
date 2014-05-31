@@ -21,7 +21,7 @@ def hash(string):
 
 def gettimestamp(dd):
     if isinstance(dd, datetime):
-        return time.mktime(dd.timetuple())
+        return int(time.mktime(dd.timetuple()))
     else:
         raise InternalError('Type Error', 'Only datetime object can convert to timestamp')
 
