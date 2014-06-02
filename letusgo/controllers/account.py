@@ -102,7 +102,9 @@ def profile():
     r = {
             'status': True, 
             'message': 'OK', 
-            'result': ''
+            'result': {
+                'Actor': g.user.dump()
+            }
         }
     return json.dumps(r)
 
