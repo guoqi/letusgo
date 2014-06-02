@@ -88,7 +88,7 @@ def verify():
 				'Actor': u.dump()
             }
         }
-	r['result']['Actor']['token'] = u.token
+    r['result']['Actor']['token'] = u.token
     return json.dumps(r)
     
 @bp.route('/profile', methods=['POST'])
