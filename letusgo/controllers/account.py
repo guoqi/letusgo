@@ -35,7 +35,7 @@ def login():
             'result': {
                 'Actor': user.dump()
                 }
-        }
+            }
     r['result']['Actor']['token'] = user.token
     return json.dumps(r)
 
@@ -60,7 +60,7 @@ def reg():
             'status': True, 
             'message': 'OK', 
             'result': ''
-        }
+            }
     return json.dumps(r)
 
 @bp.route('/verify', methods=['POST'])
@@ -68,7 +68,7 @@ def verify():
     args = request.form
     filter(args, ('v', 'dd'))
     istimeout(args['dd'])
-    
+
     # fetch the storage
     d = shelve.open('temp')
     # filter the storage
@@ -85,12 +85,12 @@ def verify():
             'status': True, 
             'message': 'OK', 
             'result': {
-				'Actor': u.dump()
+                'Actor': u.dump()
             }
         }
-	r['result']['Actor']['token'] = u.token
+    r['result']['Actor']['token'] = u.token
     return json.dumps(r)
-    
+
 @bp.route('/profile', methods=['POST'])
 @require_login
 def profile():
@@ -104,8 +104,8 @@ def profile():
             'message': 'OK', 
             'result': {
                 'Actor': g.user.dump()
+                }
             }
-        }
     return json.dumps(r)
 
 @bp.route('/pwd', methods=['POST'])
@@ -119,7 +119,7 @@ def pwd():
             'status': True, 
             'message': 'OK', 
             'result': ''
-        }
+            }
     return json.dumps(r)
 
 @bp.route('/avatar', methods=['POST'])
@@ -138,9 +138,9 @@ def info():
             'status': True, 
             'message': 'OK', 
             'result': {
-                    'Actor': u.dump()
+                'Actor': u.dump()
                 }
-        }
+            }
     r['result']['Actor']['h_activities'] = []
     r['result']['Actor']['p_activities'] = []
     for a in u.h_activities:
