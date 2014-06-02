@@ -112,7 +112,9 @@ def profile():
 @require_login
 def pwd():
     filter(g.args, ('new_pwd', ))
+    print g.args['new_pwd']
     g.user.pwd = hash(base64.decodestring(g.args['new_pwd']))
+    print g.user.pwd
     db.session.add(g.user)
     db.session.commit()
     r = {
