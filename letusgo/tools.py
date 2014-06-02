@@ -10,6 +10,7 @@ import thread
 import random
 import string
 import time
+import math
 from datetime import datetime
 
 from globals import AVATAR_DIR, AVATAR_BIG_SIZE, AVATAR_SMALL_SIZE, DEFAULT_AVATAR_CACHE_DIR, \
@@ -21,7 +22,7 @@ def hash(string):
 
 def gettimestamp(dd):
     if isinstance(dd, datetime):
-        return int(time.mktime(dd.timetuple()))
+        return math.ceil(time.mktime(dd.timetuple()))
     else:
         raise InternalError('Type Error', 'Only datetime object can convert to timestamp')
 
@@ -62,8 +63,9 @@ def istimeout(dd, timeout=TIME_OUT):
     '''
     Return whether the request is timeout or not.
     '''
-    print dd, gettimestamp(datetime.now())
-    diff  = int(gettimestamp(datetime.now())) - int(dd)
+    print time.time(), time.mktime(datetime.now().timetuple())
+    print dd, math.ceil(time.time())
+    diff  = int(math.ceil(time.time())) - int(dd)
     print diff
     if diff < 0 or diff > timeout:
         raise ThrownError('Time out')
