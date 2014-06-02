@@ -85,10 +85,10 @@ def verify():
             'status': True, 
             'message': 'OK', 
             'result': {
-                    'uid': u.uid, 
-                    'token': u.token
-                }
+				'Actor': u.dump()
+            }
         }
+	r['result']['Actor']['token'] = u.token
     return json.dumps(r)
     
 @bp.route('/profile', methods=['POST'])
