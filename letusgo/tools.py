@@ -66,8 +66,8 @@ def istimeout(dd, timeout=TIME_OUT):
     print time.time(), time.mktime(datetime.now().timetuple())
     print dd, math.ceil(time.time())
     diff  = int(math.ceil(time.time())) - int(dd)
-    print diff
-    if diff < 0 or diff > timeout:
+    print math.fabs(diff)
+    if math.fabs(diff) > timeout:
         raise ThrownError('Time out')
     return True
 
