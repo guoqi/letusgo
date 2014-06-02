@@ -162,6 +162,7 @@ def require_login(func):
         u = User.query.filter(User.uid == int(args['uid'])).first()
         if u is None:
             raise ThrownError('User do not exists.')
+        print hash(':'.join(u.token, args['dd'])), args['auth']
         if hash(':'.join([u.token, args['dd']])) != args['auth']:
             raise ThrownError('Wrong token.')
         g.user = u 
