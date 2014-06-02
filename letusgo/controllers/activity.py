@@ -132,7 +132,7 @@ def list():
 @bp.route('/search', methods=['GET'])
 def search():
     args = request.args
-    filter(args, ('q', ))
+    filter(args, ('q', 'l', 'b'))
     activities = Activity.query.filter(or_(Activity.name.like('%'+args['q']+'%'), \
             Activity.intro.like('%'+args['q']+'%'))).all()
     r = {
@@ -143,7 +143,9 @@ def search():
                 }
         }
     for a in activities:
+        # print a.name
         d = a.distances(float(args['l']), float(args['b']))
+        print d
         r['result']['ActiEvent'].append(a.dump())
         r['result']['ActiEvent'][-1]['distances'] = d
     return json.dumps(r)
