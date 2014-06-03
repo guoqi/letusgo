@@ -2,6 +2,7 @@
 #coding: utf-8
 from datetime import datetime
 import math
+import time
 
 from _base import db
 from ..tools import gettimestamp
@@ -68,6 +69,14 @@ class Activity(db.Model):
         '''
         Dump the object.
         '''
+        dd = int(math.ceil(time.time()))
+        if dd > self.start_t:
+            if dd < self.end_t:
+                self.status = 1
+            else:
+                self.status = 2
+        db.session.add(self)
+        db.session.commit()
         return {
                     'aid': self.aid, 
                     'name': self.name, 
