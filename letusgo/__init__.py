@@ -42,13 +42,32 @@ def init_blueprint(app):
 
 def init_errorhandlers(app):
     import json
-    from errors import ThrownError
+    from errors import ThrownError, InternalError
 
     @app.errorhandler(ThrownError)
-    def handle(e):
+    def thrownerror(e):
         r = {
                 'status': False, 
                 'message': e.err, 
+                'result': ''
+            }
+        return json.dumps(r)
+
+    @app.errorhandler(500)
+    @app.errorhandler(InternalError)
+    def internalerror(e):
+        r = {
+                'status': False, 
+                'message': 'Internal Error', 
+                'result': ''
+            }
+        return json.dumps(r)
+
+    @app.errorhandler(404)
+    def notfound(e):
+        r = {
+                'status': False, 
+                'message': 'Not Found', 
                 'result': ''
             }
         return json.dumps(r)
