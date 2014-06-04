@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #coding: utf-8
 from PIL import Image
-import md5
+from hashlib import md5
 import os
 import json
 import urllib
@@ -18,7 +18,7 @@ from globals import AVATAR_DIR, AVATAR_BIG_SIZE, AVATAR_SMALL_SIZE, DEFAULT_AVAT
 from errors import InternalError, ThrownError
 
 def hash(string):
-    return md5.md5(string).hexdigest()
+    return md5(string).hexdigest()
 
 def gettimestamp(dd):
     if isinstance(dd, datetime):
