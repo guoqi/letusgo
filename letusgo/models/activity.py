@@ -28,18 +28,20 @@ class Activity(db.Model):
     voteups = db.Column(db.Integer, nullable=False, default=0)
     longitude = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=False)
+    loc = db.Column(db.String(255), nullable=False)
     image = db.Column(db.String(255), nullable=False)
 
     reviews = db.relationship('Review', backref=db.backref('activity', lazy='select'), lazy='dynamic')
 
-    def __init__(self, name, uid, start_t, end_t, limits, longitude, latitude, intro='', image=''):
+    def __init__(self, name, uid, start_t, end_t, limits, longitude, latitude, loc, intro='', image=''):
         self.name = name
         self.uid = int(uid)
-        self.start_t = datetime.fromtimestamp(int(start_t))
-        self.end_t = datetime.fromtimestamp(int(end_t))
+        self.start_t = datetime.fromtimestamp(float(start_t))
+        self.end_t = datetime.fromtimestamp(float(end_t))
         self.limits = int(limits)
         self.longitude = float(longitude)
         self.latitude = float(latitude)
+        self.loc = loc
         self.intro = intro
         self.image = image
 
@@ -70,13 +72,14 @@ class Activity(db.Model):
         Dump the object.
         '''
         dd = int(math.ceil(time.time()))
-        if dd > self.start_t:
-            if dd < self.end_t:
+        if dd - gettimestamp(self.start_t) > 0:
+            if dd < gettimestamp(self.end_t) < 0:
                 self.status = 1
             else:
                 self.status = 2
         db.session.add(self)
         db.session.commit()
+        print self.last_time
         return {
                     'aid': self.aid, 
                     'name': self.name, 
@@ -92,5 +95,6 @@ class Activity(db.Model):
                     'voteups': self.voteups, 
                     'longitude': self.longitude, 
                     'latitude': self.latitude, 
+                    'loc': self.loc, 
                     'image': self.image 
                 }
