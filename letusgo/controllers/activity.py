@@ -6,7 +6,7 @@ import json
 import time
 from datetime import datetime
 
-from ..tools import require_login, filter, gettimestamp
+from ..tools import require_login, filter 
 from ..models import Activity, db
 from ..errors import ThrownError
 
@@ -23,12 +23,12 @@ def time_validate(s, e):
 @require_login
 def release():
     args = g.args
-    filter(args, ('name', 'start_t', 'end_t', 'limits', 'longitude', 'latitude'))
-    info = args.get('intro', '', type=str)
+    filter(args, ('name', 'start_t', 'end_t', 'limits', 'longitude', 'latitude', 'loc'))
+    intro = args.get('intro', '', type=str)
     image = args.get('image', '', type=str)
     time_validate(args['start_t'], args['end_t'])
     a = Activity(args['name'], g.user.uid, args['start_t'], args['end_t'], \
-            args['limits'], args['longitude'], args['latitude'], info, image)
+            args['limits'], args['longitude'], args['latitude'], args['loc'], intro, image)
     db.session.add(a)
     db.session.commit()
     r = {
@@ -47,8 +47,8 @@ def upload():
 @require_login
 def profile():
     args = g.args
-    filter(args, ('aid', 'start_t', 'end_t', 'limits', 'longitude', 'latitude'))
-    info = args.get('intro', '', type=str)
+    filter(args, ('aid', 'start_t', 'end_t', 'limits', 'longitude', 'latitude', 'loc'))
+    intro = args.get('intro', '', type=str)
     image = args.get('image', '', type=str)
     time_validate(args['start_t'], args['end_t'])
     start_t = datetime.fromtimestamp(float(args['start_t']))
@@ -62,7 +62,7 @@ def profile():
         setattr(a, k, args[k])
     a.start_t = start_t
     a.end_t = end_t
-    a.intro = info
+    a.intro = intro
     a.image = image
     db.session.add(a)
     db.session.commit()
