@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #coding: utf-8
 from datetime import datetime
+from sqlalchemy.dialects.mysql import DOUBLE
 import math
 import time
 
@@ -26,8 +27,8 @@ class Activity(db.Model):
     limits = db.Column(db.Integer, nullable=False)
     participants = db.Column(db.Integer, nullable=False, default=0)
     voteups = db.Column(db.Integer, nullable=False, default=0)
-    longitude = db.Column(db.Float, nullable=False)
-    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(DOUBLE, nullable=False)
+    latitude = db.Column(DOUBLE, nullable=False)
     loc = db.Column(db.String(255), nullable=False)
     image = db.Column(db.String(255), nullable=False)
 
@@ -55,6 +56,10 @@ class Activity(db.Model):
         '''
         return self.end_t - self.start_t
 
+    def convert(self):
+        self.longitude = float(self.longitude)
+        self.latitude = float(self.latitude)
+
     def distances(self, l, b):
         '''
         Return distances from a specified location.
@@ -80,10 +85,11 @@ class Activity(db.Model):
         db.session.add(self)
         db.session.commit()
         print self.last_time
+        self.convert()
         return {
                     'aid': self.aid, 
                     'name': self.name, 
-                    'host': self.host.uid, 
+                    'host': self.host.dump(), 
                     'intro': self.intro, 
                     'launch_t': gettimestamp(self.launch_t), 
                     'start_t': gettimestamp(self.start_t), 

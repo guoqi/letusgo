@@ -24,8 +24,8 @@ def time_validate(s, e):
 def release():
     args = g.args
     filter(args, ('name', 'start_t', 'end_t', 'limits', 'longitude', 'latitude', 'loc'))
-    intro = args.get('intro', '', type=str)
-    image = args.get('image', '', type=str)
+    intro = args.get('intro', '')
+    image = args.get('image', '')
     time_validate(args['start_t'], args['end_t'])
     a = Activity(args['name'], g.user.uid, args['start_t'], args['end_t'], \
             args['limits'], args['longitude'], args['latitude'], args['loc'], intro, image)
@@ -102,13 +102,15 @@ def near():
             'message': 'OK', 
             'result': {
                 'ActiEvent': []
-                }
+            }
         }
     for a in activities:
+        a.convert()
         d = a.distances(float(args['l']), float(args['b']))
         if d <= 1:
             r['result']['ActiEvent'].append(a.dump())
             r['result']['ActiEvent'][-1]['distances'] = d
+    sorted(r['result']['ActiEvent'], key=lambda x: x['distances'])
     return json.dumps(r)
 
 @bp.route('/list', methods=['GET'])
@@ -124,6 +126,7 @@ def list():
                 }
         }
     for a in activities.items:
+        a.convert()
         d = a.distances(float(args['l']), float(args['b']))
         r['result']['ActiEvent'].append(a.dump())
         r['result']['ActiEvent'][-1]['distances'] = d
@@ -144,6 +147,7 @@ def search():
         }
     for a in activities:
         # print a.name
+        a.convert()
         d = a.distances(float(args['l']), float(args['b']))
         print d
         r['result']['ActiEvent'].append(a.dump())
