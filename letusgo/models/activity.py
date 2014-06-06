@@ -83,7 +83,7 @@ class Activity(db.Model):
         return {
                     'aid': self.aid, 
                     'name': self.name, 
-                    'host': self.host.uid, 
+                    'host': self.host.dump(), 
                     'intro': self.intro, 
                     'launch_t': gettimestamp(self.launch_t), 
                     'start_t': gettimestamp(self.start_t), 

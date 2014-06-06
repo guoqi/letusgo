@@ -24,8 +24,8 @@ def time_validate(s, e):
 def release():
     args = g.args
     filter(args, ('name', 'start_t', 'end_t', 'limits', 'longitude', 'latitude', 'loc'))
-    intro = args.get('intro', '', type=str)
-    image = args.get('image', '', type=str)
+    intro = args.get('intro', '')
+    image = args.get('image', '')
     time_validate(args['start_t'], args['end_t'])
     a = Activity(args['name'], g.user.uid, args['start_t'], args['end_t'], \
             args['limits'], args['longitude'], args['latitude'], args['loc'], intro, image)
