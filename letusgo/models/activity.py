@@ -45,6 +45,7 @@ class Activity(db.Model):
         self.loc = loc
         self.intro = intro
         self.image = image
+        self.launch_t = datetime.now()
 
     def render_image(self):
         return open(self.image, 'rb')
