@@ -3,6 +3,7 @@
 from datetime import datetime
 
 from _base import db
+from ..tools import gettimestamp
 
 class Review(db.Model):
     rid = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -25,5 +26,6 @@ class Review(db.Model):
         return {
                 'rid': self.rid, 
                 'content': self.content, 
-                'reviewer': self.reivewer.dump()
+                'reviewer': self.reivewer.dump(), 
+                'review_t': gettimestamp(self.review_t)
                 }
