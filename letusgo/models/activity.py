@@ -18,8 +18,8 @@ class Activity(db.Model):
     uid = db.Column(db.Integer, db.ForeignKey('user.uid'), nullable=False)
 
     intro = db.Column(db.String(255), nullable=False)
-    launch_t = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    update_t = db.Column(db.DateTime, nullable=False, default=datetime.now(), onupdate=datetime.now())
+    launch_t = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    update_t = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
     start_t = db.Column(db.DateTime, nullable=False)
     end_t = db.Column(db.DateTime, nullable=False)
     # 0 means to do; 1 means doing; 2 means done.
@@ -45,7 +45,6 @@ class Activity(db.Model):
         self.loc = loc
         self.intro = intro
         self.image = image
-        self.launch_t = datetime.now()
 
     def render_image(self):
         return open(self.image, 'rb')
