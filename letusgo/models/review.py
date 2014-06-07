@@ -12,7 +12,7 @@ class Review(db.Model):
     aid = db.Column(db.Integer, db.ForeignKey('activity.aid'), nullable=False)
     # use review.reviewer
     uid = db.Column(db.Integer, db.ForeignKey('user.uid'), nullable=False)
-    review_t = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    review_t = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
     def __init__(self, content, aid, uid):
         self.content = content

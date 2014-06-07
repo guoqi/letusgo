@@ -12,6 +12,7 @@ bp = Blueprint('review', __name__)
 @bp.route('/list', methods=['GET'])
 def list():
     args = request.args
+    print args
     filter(args, ('aid', 's'))
     reviews = Review.query.order_by(Review.review_t.desc()).paginate(args['s'], 10, False)
     r = {
