@@ -3,7 +3,7 @@
 from flask import Blueprint, request, g
 import json
 
-from ..tools import require_login
+from ..tools import require_login, filter
 from ..models import Review, db
 # from ..errors import ThrownError
 
