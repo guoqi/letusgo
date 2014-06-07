@@ -22,7 +22,7 @@ def list():
                 'Comment': []
                 }
         }
-    for rev in reviews:
+    for rev in reviews.items:
         r['result']['Comment'].append(rev.dump())
     return json.dumps(r)
 
