@@ -14,7 +14,7 @@ def list():
     args = request.args
     print args
     filter(args, ('aid', 's'))
-    reviews = Review.query.order_by(Review.review_t.desc()).paginate(args['s'], 10, False)
+    reviews = Review.query.order_by(Review.review_t.desc()).paginate(int(args['s']), 10, False)
     r = {
             'status': True, 
             'message': 'OK', 
@@ -30,8 +30,9 @@ def list():
 @require_login
 def release():
     args = g.args
+    print args
     filter(args, ('aid', 'content'))
-    r = Review(content=args['content'], aid=args['aid'], uid=g.user.uid)
+    r = Review(content=args['content'], aid=int(args['aid']), uid=g.user.uid)
     db.session.add(r) 
     db.session.commit()
     r = {
