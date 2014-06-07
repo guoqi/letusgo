@@ -105,7 +105,6 @@ def near():
             }
         }
     for a in activities:
-        print a.name
         a.convert()
         d = a.distances(float(args['l']), float(args['b']))
         if d <= 1:
@@ -127,7 +126,6 @@ def list():
                 }
         }
     for a in activities.items:
-        print a.name
         a.convert()
         d = a.distances(float(args['l']), float(args['b']))
         r['result']['ActiEvent'].append(a.dump())
