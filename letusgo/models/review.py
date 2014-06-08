@@ -26,6 +26,6 @@ class Review(db.Model):
         return {
                 'rid': self.rid, 
                 'content': self.content, 
-                'reviewer': self.reivewer.dump(), 
+                'reviewer': self.reviewer.dump(), 
                 'review_t': gettimestamp(self.review_t)
                 }
