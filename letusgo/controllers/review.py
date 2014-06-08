@@ -14,7 +14,7 @@ def list():
     args = request.args
     print args
     filter(args, ('aid', 's'))
-    reviews = Review.query.order_by(Review.review_t.desc()).paginate(int(args['s']), 10, False)
+    reviews = Review.query.filter(Review.aid == int(args['aid'])).paginate(int(args['s']), 10, False)
     r = {
             'status': True, 
             'message': 'OK', 
