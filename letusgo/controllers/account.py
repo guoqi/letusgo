@@ -124,7 +124,7 @@ def pwd():
             'status': True, 
             'message': 'OK', 
             'result': ''
-            }
+        }
     return json.dumps(r)
 
 @bp.route('/avatar', methods=['POST'])
@@ -152,8 +152,7 @@ def avatar():
             'status': True, 
             'message': 'OK', 
             'result': {
-                'big_avatar': d['url'][1], 
-                'small_avatar': d['url'][2]
+                'Actor': g.user.dump()
             }
         }
     return json.dumps(r)
