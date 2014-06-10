@@ -6,13 +6,12 @@ import base64
 import shelve
 import time
 import os
-from werkzeug import secure_filename
 
 from ..tools import sms, filter, istimeout, hash, gentoken, gencaptcha, require_login, \
-        thumbnails, convert2png, allowed_file
+        thumbnails, convert2png 
 from ..models import User, db
 from ..errors import ThrownError, InternalError
-from ..globals import AVATAR_DIR
+from ..globals import AVATAR_DIR, ALLOWED_EXTENSIONS
 
 bp = Blueprint('account', __name__)
 
@@ -131,14 +130,19 @@ def pwd():
 @bp.route('/avatar', methods=['POST'])
 @require_login
 def avatar():
-    file = request.files['avatar']
-    if not file:
-        raise ThrownError('Not file.')
-    f, e = allowed_file(file.filename)
-    path = os.sep.join([AVATAR_DIR, 'cache', g.user.id+e])
-    file.save(path)
+    args = request.form
+    filter(args, ('img', 'ext'))
+    e = args['ext'].lower()
+    if e not in ALLOWED_EXTENSIONS:
+        raise ThrownError('Not allowed file extension.')
+    bits = base64.decodestring(args['img'])
+    print type(bits) 
+    path = os.sep.join([AVATAR_DIR, 'cache', str(g.user.uid)+'.'+e])
+    f = open(path, 'wb')
+    f.write(bits)
+    f.close()
     convert2png(path)
-    d = thumbnails(g.user.id, g.user.id)
+    d = thumbnails(str(g.user.uid), str(g.user.uid))
     r = {
             'status': True, 
             'message': 'OK', 
