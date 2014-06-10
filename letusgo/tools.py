@@ -14,7 +14,7 @@ import math
 from datetime import datetime
 
 from globals import AVATAR_DIR, AVATAR_BIG_SIZE, AVATAR_SMALL_SIZE, DEFAULT_AVATAR_CACHE_DIR, \
-        APP_NAME, COMPANY_NAME, TIME_OUT, SMS_TPL_REG
+        APP_NAME, COMPANY_NAME, TIME_OUT, SMS_TPL_REG, H_AVATAR_DIR, ALLOWED_EXTENSIONS
 from errors import InternalError, ThrownError
 
 def hash(string):
@@ -71,6 +71,12 @@ def istimeout(dd, timeout=TIME_OUT):
         raise ThrownError('Time out')
     return True
 
+def allowed_file(filename):
+    f, e = os.path.splitext(filename)
+    if e not in ALLOWED_EXTENSIONS:
+        raise ThrownError('File extension not allowed.')
+    return (f, e)
+
 def thumbnails(image_dir, filename='default'):
     '''
     Genrate a thumbnail of user\'s avatar.
@@ -96,7 +102,14 @@ def thumbnails(image_dir, filename='default'):
         raise InternalError('File io error', e.message)
     # remove cache file
     os.remove(inputfile)
-    return (o, o64, o32)
+    # generate url
+    u = '/'.join([H_AVATAR_DIR, image_dir, filename+'.png'])
+    u64 = '/'.join([H_AVATAR_DIR, image_dir, filename+'64.png'])
+    u32 = '/'.join([H_AVATAR_DIR, image_dir, filename+'32.png'])
+    return {
+            'path': (o, o64, o32), 
+            'url': (u, u64, u32)
+        }
 
 def convert2png(image_path):
     '''
@@ -173,8 +186,8 @@ def require_login(func):
     return wrapper
 
 if __name__ == '__main__':
-    # convert2png('/var/www/letusgo/letusgo/avatar/cache/default.jpg')
-    # print thumbnails('default')
+    convert2png('/var/www/letusgo/letusgo/avatar/cache/default.jpg')
+    print thumbnails('default')
     # tpl_send('13260614509', '123456', 6)
     pass
 else:

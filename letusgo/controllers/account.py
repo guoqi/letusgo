@@ -5,10 +5,14 @@ import json
 import base64
 import shelve
 import time
+import os
+from werkzeug import secure_filename
 
-from ..tools import sms, filter, istimeout, hash, gentoken, gencaptcha, require_login
+from ..tools import sms, filter, istimeout, hash, gentoken, gencaptcha, require_login, \
+        thumbnails, convert2png, allowed_file
 from ..models import User, db
 from ..errors import ThrownError, InternalError
+from ..globals import AVATAR_DIR
 
 bp = Blueprint('account', __name__)
 
@@ -105,7 +109,7 @@ def profile():
             'result': {
                 'Actor': g.user.dump()
                 }
-            }
+        }
     return json.dumps(r)
 
 @bp.route('/pwd', methods=['POST'])
@@ -127,7 +131,23 @@ def pwd():
 @bp.route('/avatar', methods=['POST'])
 @require_login
 def avatar():
-    pass
+    file = request.files['avatar']
+    if not file:
+        raise ThrownError('Not file.')
+    f, e = allowed_file(file.filename)
+    path = os.sep.join([AVATAR_DIR, 'cache', g.user.id+e])
+    file.save(path)
+    convert2png(path)
+    d = thumbnails(g.user.id, g.user.id)
+    r = {
+            'status': True, 
+            'message': 'OK', 
+            'result': {
+                'big_avatar': d['url'][1], 
+                'small_avatar': d['url'][2]
+            }
+        }
+    return json.dumps(r)
 
 @bp.route('/info', methods=['GET'])
 def info():

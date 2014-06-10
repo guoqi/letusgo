@@ -35,10 +35,11 @@ def init_blueprint(app):
     '''
     Initialize blueprints
     '''
-    from controllers import account, activity, review
+    from controllers import account, activity, review, img
     app.register_blueprint(account.bp, url_prefix='/account')
     app.register_blueprint(activity.bp, url_prefix='/activity')
     app.register_blueprint(review.bp, url_prefix='/review')
+    app.register_blueprint(img.bp, url_prefix='/img')
 
 def init_errorhandlers(app):
     import json

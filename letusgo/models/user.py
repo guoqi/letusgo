@@ -6,7 +6,7 @@ from _base import db
 from participant import Participant
 from voteup import Voteup
 from ..errors import ThrownError
-from ..globals import DEFAULT_AVATAR_BIG, DEFAULT_AVATAR_SMALL, DEFAULT_AVATAR_ORIGIN
+from ..globals import H_DEFAULT_AVATAR_BIG, H_DEFAULT_AVATAR_SMALL, H_DEFAULT_AVATAR_ORIGIN
 
 class User(db.Model):
     '''
@@ -16,9 +16,9 @@ class User(db.Model):
     tel = db.Column(db.String(11), nullable=False, unique=True)
     pwd = db.Column(db.String(32), nullable=False)
     name = db.Column(db.String(32), nullable=False, default='Anonymous')
-    big_avatar = db.Column(db.String(255), nullable=False, default=DEFAULT_AVATAR_BIG)
-    small_avatar = db.Column(db.String(255), nullable=False, default=DEFAULT_AVATAR_SMALL)
-    origin_avatar = db.Column(db.String(255), nullable=False, default=DEFAULT_AVATAR_ORIGIN)
+    big_avatar = db.Column(db.String(255), nullable=False, default=H_DEFAULT_AVATAR_BIG)
+    small_avatar = db.Column(db.String(255), nullable=False, default=H_DEFAULT_AVATAR_SMALL)
+    origin_avatar = db.Column(db.String(255), nullable=False, default=H_DEFAULT_AVATAR_ORIGIN)
     # sex 
     # 1 indicates male while 0 indicates female.
     sex = db.Column(db.SmallInteger, nullable=False, default=1)
