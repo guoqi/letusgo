@@ -143,6 +143,11 @@ def avatar():
     f.close()
     convert2png(path)
     d = thumbnails(str(g.user.uid), str(g.user.uid))
+    g.user.origin_avatar = d['url'][0]
+    g.user.big_avatar = d['url'][1]
+    g.user.small_avatar = d['url'][2]
+    db.session.add(g.user)
+    db.session.commit()
     r = {
             'status': True, 
             'message': 'OK', 
