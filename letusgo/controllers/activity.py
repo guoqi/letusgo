@@ -92,9 +92,9 @@ def delete():
         }
     return json.dumps(r)
 
-@bp.route('/near', methods=['GET'])
+@bp.route('/near', methods=['POST'])
 def near():
-    args = request.args
+    args = request.form
     filter(args, ('l', 'b'))
     activities = Activity.query.all()
     r = {
@@ -104,18 +104,32 @@ def near():
                 'ActiEvent': []
             }
         }
+    # validate if login
+    if args.has_key('uid'):
+        @require_login
+        def void():
+            pass
+        void()
+
     for a in activities:
         a.convert()
         d = a.distances(float(args['l']), float(args['b']))
         if d <= 1:
             r['result']['ActiEvent'].append(a.dump())
             r['result']['ActiEvent'][-1]['distances'] = d
+            r['result']['ActiEvent'][-1]['parted'] = False
+            r['result']['ActiEvent'][-1]['voted'] = False
+            if g.user is not None:
+                if g.user in a.joins:
+                    r['result']['ActiEvent'][-1]['parted'] = True
+                if g.user in a.voters:
+                    r['result']['ActiEvent'][-1]['voted'] = True
     sorted(r['result']['ActiEvent'], key=lambda x: x['distances'])
     return json.dumps(r)
 
-@bp.route('/list', methods=['GET'])
+@bp.route('/list', methods=['POST'])
 def list():
-    args = request.args
+    args = request.form
     filter(args, ('s', 'l', 'b'))
     activities = Activity.query.order_by(Activity.launch_t.desc()).paginate(int(args['s']), 10, False)
     r = {
@@ -125,14 +139,29 @@ def list():
                 'ActiEvent':[]
                 }
         }
+    # validate if login
+    if args.has_key('uid'):
+        @require_login
+        def void():
+            pass
+        void()
+
     for a in activities.items:
         a.convert()
         d = a.distances(float(args['l']), float(args['b']))
         r['result']['ActiEvent'].append(a.dump())
         r['result']['ActiEvent'][-1]['distances'] = d
+        r['result']['ActiEvent'][-1]['parted'] = False
+        r['result']['ActiEvent'][-1]['voted'] = False
+        if g.user is not None:
+            if g.user in a.joins:
+                r['result']['ActiEvent'][-1]['parted'] = True
+            if g.user in a.voters:
+                r['result']['ActiEvent'][-1]['voted'] = True
+
     return json.dumps(r)
 
-@bp.route('/search', methods=['GET'])
+@bp.route('/search', methods=['POST'])
 def search():
     args = request.args
     filter(args, ('q', 'l', 'b'))
@@ -145,6 +174,13 @@ def search():
                 'ActiEvent':[]
                 }
         }
+    # validate if login
+    if args.has_key('uid'):
+        @require_login
+        def void():
+            pass
+        void()
+
     for a in activities:
         # print a.name
         a.convert()
@@ -152,6 +188,14 @@ def search():
         print d
         r['result']['ActiEvent'].append(a.dump())
         r['result']['ActiEvent'][-1]['distances'] = d
+        r['result']['ActiEvent'][-1]['parted'] = False
+        r['result']['ActiEvent'][-1]['voted'] = False
+        if g.user is not None:
+            if g.user in a.joins:
+                r['result']['ActiEvent'][-1]['parted'] = True
+            if g.user in a.voters:
+                r['result']['ActiEvent'][-1]['voted'] = True
+
     return json.dumps(r)
 
 @bp.route('/participants', methods=['GET'])
