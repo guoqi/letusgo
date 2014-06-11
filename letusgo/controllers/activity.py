@@ -104,6 +104,7 @@ def near():
                 'ActiEvent': []
             }
         }
+    g.user = None
     # validate if login
     if args.has_key('uid'):
         @require_login
@@ -139,6 +140,7 @@ def list():
                 'ActiEvent':[]
                 }
         }
+    g.user = None
     # validate if login
     if args.has_key('uid'):
         @require_login
@@ -174,6 +176,7 @@ def search():
                 'ActiEvent':[]
                 }
         }
+    g.user = None
     # validate if login
     if args.has_key('uid'):
         @require_login
