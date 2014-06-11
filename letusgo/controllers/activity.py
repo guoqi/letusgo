@@ -230,16 +230,21 @@ def join():
     if a in g.user.p_activities:
         g.user.p_activities.remove(a)
         a.participants -= 1
+        parted = False
     else:
         g.user.p_activities.append(a)
         a.participants += 1
+        parted = True
     db.session.add(g.user)
     db.session.commit()
     r = {
             'status': True, 
             'message': 'OK', 
-            'result': ''
+            'result': {
+                'ActiEvent': a.dump()
+            }
         }
+    r['result']['ActiEvent']['parted'] = parted
     return json.dumps(r)
     
 @bp.route('/voteup', methods=['POST'])
@@ -253,14 +258,19 @@ def voteup():
     if a in g.user.v_activities:
         g.user.v_activities.remove(a)
         a.voteups -= 1
+        voted = False
     else:
         g.user.v_activities.append(a)
         a.voteups += 1
+        voted = True
     db.session.add(g.user)
     db.session.commit()
     r = {
             'status': True, 
             'message': 'OK', 
-            'result': ''
+            'result': {
+                'ActiEvent': a.dump()
+            }
         }
+    r['result']['ActiEvent']['voted'] = voted
     return json.dumps(r)
