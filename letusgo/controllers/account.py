@@ -97,7 +97,7 @@ def verify():
 @bp.route('/profile', methods=['POST'])
 @require_login
 def profile():
-    filter(g.args, ('name', 'avatar', 'sex', 'age', 'loc'))
+    filter(g.args, ('name', 'sex', 'age', 'loc'))
     for k in g.args.iterkeys():
         setattr(g.user, k, g.args[k])
     db.session.add(g.user)
