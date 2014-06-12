@@ -165,7 +165,7 @@ def list():
 
 @bp.route('/search', methods=['POST'])
 def search():
-    args = request.args
+    args = request.form
     filter(args, ('q', 'l', 'b'))
     activities = Activity.query.filter(or_(Activity.name.like('%'+args['q']+'%'), \
             Activity.intro.like('%'+args['q']+'%'))).all()
@@ -244,7 +244,12 @@ def join():
                 'ActiEvent': a.dump()
             }
         }
+    if g.user in a.voters:
+        voted = True
+    else:
+        voted = False
     r['result']['ActiEvent']['parted'] = parted
+    r['result']['ActiEvent']['voted'] = voted
     return json.dumps(r)
     
 @bp.route('/voteup', methods=['POST'])
@@ -272,5 +277,10 @@ def voteup():
                 'ActiEvent': a.dump()
             }
         }
+    if g.user in a.joins:
+        parted = True
+    else:
+        parted = False
     r['result']['ActiEvent']['voted'] = voted
+    r['result']['ActiEvent']['parted'] = parted
     return json.dumps(r)
