@@ -1,4 +1,3 @@
-letusgo
+LetUsGo
 =======
-安卓app的后台
-
+Server side of an app named LetUsGo.
